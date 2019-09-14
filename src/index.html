@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Fluid element</title>
+
+    <script type="module" src="/build/form-field.esm.js"></script>
+    <script nomodule src="/build/form-field.js"></script>
+    <style>
+      label {
+        display: block;
+      }
+      .element {
+        padding: 40px;
+        text-align: center;
+      }
+      #element1 .element {
+        background: chartreuse;
+      }
+      #element2 .element {
+        background: hotpink;
+      }
+      #element3 .element {
+        background: blue;
+      }
+      #element4 .element {
+        background: darkred;
+      }
+      #element5 .element {
+        background: darkturquoise;
+      }
+      .flex {
+        min-height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex">
+      <fluid-element id="element1" show>
+        <div class="element">Element 1</div>
+      </fluid-element>
+
+      <fluid-element id="element2" show>
+        <div class="element">Element 2</div>
+      </fluid-element>
+
+      <fluid-element id="element3">
+        <div class="element">
+          Element 3
+
+          <fluid-element id="element5" show>
+            <div class="element">Element 5</div>
+          </fluid-element>
+        </div>
+      </fluid-element>
+
+      <fluid-element id="element4" show>
+        <div class="element">Element 4</div>
+      </fluid-element>
+    </div>
+
+    <label
+      ><input
+        type="checkbox"
+        checked
+        onclick="javascript:document.querySelector('#element1').show = !document.querySelector('#element1').show"
+      />
+      Show Element 1</label
+    >
+    <label
+      ><input
+        type="checkbox"
+        checked
+        onclick="javascript:document.querySelector('#element2').show = !document.querySelector('#element2').show"
+      />
+      Show Element 2</label
+    >
+    <label
+      ><input
+        type="checkbox"
+        onclick="javascript:document.querySelector('#element3').show = !document.querySelector('#element3').show"
+      />
+      Show Element 3</label
+    >
+    <label
+      ><input
+        type="checkbox"
+        checked
+        onclick="javascript:document.querySelector('#element4').show = !document.querySelector('#element4').show"
+      />
+      Show Element 4</label
+    >
+    <label
+      ><input
+        type="checkbox"
+        checked
+        onclick="javascript:document.querySelector('#element5').show = !document.querySelector('#element5').show"
+      />
+      Show Element 5</label
+    >
+  </body>
+</html>
