@@ -9,92 +9,122 @@ const speed = 0.3;
   shadow: true
 })
 export class FluidElement {
-  @Element() el: HTMLElement;
+  @Element() element: HTMLElement;
 
-  tl = new TimelineLite({
-    paused: true,
-    onUpdate: () => {
-      this.isAnimating = true;
-      this.el.classList.remove('hidden');
-      this.hidden = false;
-    },
-    onComplete: () => {
-      this.isAnimating = false;
-      this.el.style.height = 'auto';
-    },
-    onReverseComplete: () => {
-      this.isAnimating = false;
-      this.el.classList.add('hidden');
-      this.hidden = true;
-    }
-  });
+  timeline = null;
+  progress = null;
 
   @Prop({ reflect: true }) show: boolean;
   @Prop() isAnimating: boolean = false;
-  @Prop() removeContent: boolean = false;
   @State() hidden: boolean = false;
-  // @State() height: number;
-
-  // componentWillLoad() {
-  //   if (!this.el.closest('fluid-container')) {
-  //     console.error(this.el, `\nParent needs to be a <fluid-container>`);
-  //   }
-  // }
 
   componentDidLoad() {
-    this.tl.set(this.el, { height: 'auto', opacity: 0 });
-    this.tl.from(this.el, speed, {
-      height: 0,
-      ease: Power2.easeInOut
-    });
-    this.tl.to(this.el, speed, {
-      opacity: 1,
-      ease: Power2.easeInOut
-    });
-    this.tl.set(this.el, { height: 'auto' });
-
     if (!this.show) {
-      this.el.classList.add('hidden');
-    } else {
-      this.tl.progress(1);
+      this.element.classList.add('hidden');
     }
   }
 
   @Watch('show')
   showChanged(newValue: boolean) {
-    if (newValue && this.tl.totalProgress() !== 1) {
-      this.tl.play();
+    if (this.timeline) {
+      if (this.timeline.isActive()) {
+        this.timeline.reverse();
+        return;
+      }
+      this.timeline.kill();
+    }
+    if (newValue) {
+      this.showElement();
     } else {
-      this.tl.reverse();
+      this.hideElement();
     }
   }
 
-  /*   expandFadeIn() {
-    this.tl.set(this.el, { height: 'auto', opacity: 0 });
-    this.tl.from(this.el, speed, {
-      height: 0,
-      ease: Power2.easeInOut
+  showElement() {
+    this.timeline = new TimelineLite({
+      onUpdate: () => {
+        this.isAnimating = true;
+        this.element.classList.remove('hidden');
+        this.hidden = false;
+      },
+      onComplete: () => {
+        this.isAnimating = false;
+        this.element.style.height = 'auto';
+      },
+      onReverseComplete: () => {
+        this.isAnimating = false;
+        this.element.classList.add('hidden');
+        this.element.style.height = 'auto';
+        this.hidden = true;
+      }
     });
-    this.tl.to(this.el, speed, {
+    this.timeline.fromTo(
+      this.element,
+      speed,
+      {
+        height: 0,
+        opacity: 0
+      },
+      {
+        height: this.getMaxHeight(),
+        ease: Power2.easeInOut
+      }
+    );
+    this.timeline.to(this.element, speed, {
       opacity: 1,
       ease: Power2.easeInOut
     });
-  } */
+  }
 
-  /*   getHeight() {
-    if (!this.show) {
-      // this.el.classList.remove('hidden');
-      this.el.style.height = 'auto';
-    }
-    this.height = this.el.getBoundingClientRect().height;
-    console.log(this.height);
-    if (!this.show) {
-      // this.el.classList.add('hidden');
-      this.el.style.height = '0px';
-    }
-  } */
+  hideElement() {
+    this.timeline = new TimelineLite({
+      onUpdate: () => {
+        this.isAnimating = true;
+        this.element.classList.remove('hidden');
+        this.hidden = false;
+      },
+      onComplete: () => {
+        this.isAnimating = false;
+        this.element.classList.add('hidden');
+        this.element.style.height = 'auto';
+        this.hidden = true;
+      },
+      onReverseComplete: () => {
+        this.isAnimating = false;
+        this.element.style.height = 'auto';
+      }
+    });
+    this.timeline.fromTo(
+      this.element,
+      speed,
+      {
+        height: this.getMaxHeight(),
+        opacity: 1
+      },
+      {
+        opacity: 0,
+        ease: Power2.easeInOut
+      }
+    );
+    this.timeline.to(this.element, speed, {
+      height: 0,
+      ease: Power2.easeInOut
+    });
+  }
+
+  getMaxHeight() {
+    let maxHeight;
+    this.element.classList.remove('hidden');
+    maxHeight = this.element.getBoundingClientRect().height;
+    this.element.classList.add('hidden');
+    return maxHeight;
+  }
 
   render() {
-    return <Host class={{ animating: this.isAnimating }}>{this.hidden ? '' : <slot>Liquid element</slot>}</Host>;
+    return (
+      <Host class={{ animating: this.isAnimating }}>
+        <slot>Liquid element</slot>
+      </Host>
+    );
   }
 }

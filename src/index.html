@@ -8,96 +8,119 @@
     <script type="module" src="/build/form-field.esm.js"></script>
     <script nomodule src="/build/form-field.js"></script>
     <style>
+      body {
+        font-family: sans-serif;
+        min-height: 100vh;
+        background-image: linear-gradient(
+          to right top,
+          #d16ba5,
+          #c777b9,
+          #ba83ca,
+          #aa8fd8,
+          #9a9ae1,
+          #8aa7ec,
+          #79b3f4,
+          #69bff8,
+          #52cffe,
+          #41dfff,
+          #46eefa,
+          #5ffbf1
+        );
+      }
       label {
         display: block;
+        margin-bottom: 5px;
       }
       .element {
+        padding: 10px;
+      }
+      .inner {
         padding: 40px;
         text-align: center;
-      }
-      #element1 .element {
-        background: chartreuse;
-      }
-      #element2 .element {
-        background: hotpink;
-      }
-      #element3 .element {
-        background: blue;
-      }
-      #element4 .element {
-        background: darkred;
-      }
-      #element5 .element {
-        background: darkturquoise;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50px;
       }
       .flex {
-        min-height: 500px;
+        min-height: 600px;
+      }
+      .control {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
     </style>
   </head>
   <body>
     <div class="flex">
       <fluid-element id="element1" show>
-        <div class="element">Element 1</div>
+        <div class="element">
+          <div class="inner">
+            Element 1
+          </div>
+        </div>
       </fluid-element>
 
       <fluid-element id="element2" show>
-        <div class="element">Element 2</div>
+        <div class="element">
+          <div class="inner">
+            Element 2
+          </div>
+        </div>
       </fluid-element>
 
       <fluid-element id="element3">
         <div class="element">
-          Element 3
-
-          <fluid-element id="element5" show>
-            <div class="element">Element 5</div>
-          </fluid-element>
+          <div class="inner">
+            Element 3
+            <fluid-element id="element4">
+              <div class="element">
+                <div class="inner">
+                  Element 4
+                </div>
+              </div>
+            </fluid-element>
+          </div>
         </div>
       </fluid-element>
 
-      <fluid-element id="element4" show>
-        <div class="element">Element 4</div>
+      <fluid-element id="element5" show>
+        <div class="element">
+          <div class="inner">
+            Element 5
+          </div>
+        </div>
       </fluid-element>
     </div>
 
-    <label
-      ><input
-        type="checkbox"
-        checked
-        onclick="javascript:document.querySelector('#element1').show = !document.querySelector('#element1').show"
-      />
-      Show Element 1</label
-    >
-    <label
-      ><input
-        type="checkbox"
-        checked
-        onclick="javascript:document.querySelector('#element2').show = !document.querySelector('#element2').show"
-      />
-      Show Element 2</label
-    >
-    <label
-      ><input
-        type="checkbox"
-        onclick="javascript:document.querySelector('#element3').show = !document.querySelector('#element3').show"
-      />
-      Show Element 3</label
-    >
-    <label
-      ><input
-        type="checkbox"
-        checked
-        onclick="javascript:document.querySelector('#element4').show = !document.querySelector('#element4').show"
-      />
-      Show Element 4</label
-    >
-    <label
-      ><input
-        type="checkbox"
-        checked
-        onclick="javascript:document.querySelector('#element5').show = !document.querySelector('#element5').show"
-      />
-      Show Element 5</label
-    >
+    <div class="control">
+      <label><input type="checkbox" checked name="element1" /> Show element 1</label>
+      <label><input type="checkbox" checked name="element2" /> Show element 2</label>
+      <label><input type="checkbox" name="element3" /> Show element 3</label>
+      <label><input type="checkbox" name="element4" style="margin-left: 30px" /> Show element 4</label>
+      <label><input type="checkbox" checked name="element5" /> Show element 5</label>
+      <button id="random">
+        Random
+      </button>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('[type=checkbox]').forEach(checkbox =>
+          checkbox.addEventListener('change', e => {
+            const target = document.querySelector(`#${e.currentTarget.name}`);
+            target.show = !target.show;
+          })
+        );
+        document.querySelector('#random').addEventListener('click', e => {
+          const checkboxes = document.querySelectorAll('[type=checkbox]');
+          let onlyOnce = false;
+          for (let i = 0; i < checkboxes.length; i++) {
+            if (Math.random() >= 0.5) {
+              checkboxes[i].checked = !checkboxes[i].checked;
+              checkboxes[i].dispatchEvent(new Event('change'));
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

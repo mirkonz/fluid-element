@@ -12,7 +12,6 @@ export namespace Components {
   interface FluidContainer {}
   interface FluidElement {
     'isAnimating': boolean;
-    'removeContent': boolean;
     'show': boolean;
   }
 }
@@ -41,7 +40,6 @@ declare namespace LocalJSX {
   interface FluidContainer extends JSXBase.HTMLAttributes<HTMLFluidContainerElement> {}
   interface FluidElement extends JSXBase.HTMLAttributes<HTMLFluidElementElement> {
     'isAnimating'?: boolean;
-    'removeContent'?: boolean;
     'show'?: boolean;
   }
 
