@@ -9,7 +9,6 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface FluidContainer {}
   interface FluidElement {
     'isAnimating': boolean;
     'show': boolean;
@@ -19,32 +18,23 @@ export namespace Components {
 declare global {
 
 
-  interface HTMLFluidContainerElement extends Components.FluidContainer, HTMLStencilElement {}
-  var HTMLFluidContainerElement: {
-    prototype: HTMLFluidContainerElement;
-    new (): HTMLFluidContainerElement;
-  };
-
   interface HTMLFluidElementElement extends Components.FluidElement, HTMLStencilElement {}
   var HTMLFluidElementElement: {
     prototype: HTMLFluidElementElement;
     new (): HTMLFluidElementElement;
   };
   interface HTMLElementTagNameMap {
-    'fluid-container': HTMLFluidContainerElement;
     'fluid-element': HTMLFluidElementElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface FluidContainer extends JSXBase.HTMLAttributes<HTMLFluidContainerElement> {}
   interface FluidElement extends JSXBase.HTMLAttributes<HTMLFluidElementElement> {
     'isAnimating'?: boolean;
     'show'?: boolean;
   }
 
   interface IntrinsicElements {
-    'fluid-container': FluidContainer;
     'fluid-element': FluidElement;
   }
 }
